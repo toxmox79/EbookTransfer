@@ -1,0 +1,1 @@
+# EPUB Transfer – GitHub Pages mit Konvertierung\n\n- EPUB→AZW3 (Server, CONFIG.apiEndpoint in src/app.js)\n- EPUB→PDF (lokal, einfach)\n- GitHub Pages: alle Dateien ins Repo-Root, Pages auf Branch `main` + Root setzen.

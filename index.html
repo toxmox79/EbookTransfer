@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EPUB Transfer – Tolino & Kindle</title>
+    <meta name="theme-color" content="#007aff" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>EPUB Transfer</h1>
+      <p class="subtitle">Vom Android‑Handy auf Tolino/Kindle</p>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Zielgerät</h2>
+        <div class="row">
+          <label class="radio"><input type="radio" name="device" value="tolino" checked /> Tolino</label>
+          <label class="radio"><input type="radio" name="device" value="kindle" /> Kindle</label>
+        </div>
+        <p class="hint">
+          Tolino: EPUB/PDF → <code>Books</code> • Kindle: MOBI/AZW3/KFX/PDF → <code>documents</code>
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Dateien auswählen</h2>
+        <div class="row gap">
+          <input id="fileInput" type="file" multiple accept=".epub,.pdf,.mobi,.azw,.azw3,.kfx,.txt" />
+          <button id="btnPickFiles" class="btn">Dateien wählen…</button>
+        </div>
+        <div id="dropZone" class="drop">Hierher ziehen, um hinzuzufügen</div>
+        <ul id="fileList" class="list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Auf Gerät kopieren (USB/OTG)</h2>
+        <p class="hint">Verbinde deinen E‑Reader per USB‑C/OTG, wähle den Gerätespeicher, kopiere.</p>
+        <div class="row gap">
+          <button id="btnPickDir" class="btn">Zielordner wählen…</button>
+          <label class="check">
+            <input id="ensureFolder" type="checkbox" checked />
+            Unterordner automatisch nutzen (<code>Books</code> bei Tolino / <code>documents</code> bei Kindle)
+          </label>
+        </div>
+        <div class="row gap">
+          <button id="btnCopy" class="btn primary">Ausgewählte Dateien kopieren</button>
+        </div>
+        <p id="usbSupport" class="note"></p>
+      </section>
+
+      <section class="card">
+        <h2>Konvertieren</h2>
+        <p class="hint">Für Kindle: EPUB → AZW3 (Server) oder EPUB → PDF (offline). Alternativ: Teilen an „Send to Kindle“.</p>
+        <div class="row gap">
+          <button id="btnConvertServer" class="btn">EPUB → AZW3 (Server)</button>
+          <button id="btnConvertToPDF" class="btn">EPUB → PDF (lokal)</button>
+          <button id="btnSendToKindle" class="btn">EPUB → (Send to Kindle)</button>
+        </div>
+        <p id="convertLog" class="note"></p>
+      </section>
+
+      <section class="card">
+        <h2>Alternative: Teilen / Send to Kindle</h2>
+        <p class="hint">Für EPUB→Kindle oder wenn der Speicher nicht sichtbar ist, die Dateien teilen.</p>
+        <button id="btnShare" class="btn">Ausgewählte Dateien teilen…</button>
+        <p id="shareNote" class="note"></p>
+      </section>
+    </main>
+
+    <footer class="footer">Offlinefähig · Installierbar · Keine Daten verlassen dein Gerät</footer>
+
+    <script type="module" src="src/app.js"></script>
+    <!-- Libraries for local PDF conversion -->
+    <script src="https://unpkg.com/epubjs/dist/epub.js"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("sw.js").catch(console.warn);
+        });
+      }
+    </script>
+  </body>
+</html>
