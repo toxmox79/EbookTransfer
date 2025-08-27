@@ -158,6 +158,33 @@ btnConvertServer.addEventListener('click', async () => {
   if (!epub){ alert('Bitte zuerst mindestens eine EPUB-Datei auswählen.'); return; }
   try { await convertServerEPUBtoAZW3(epub); } catch (e){ console.error(e); alert('Konvertierung fehlgeschlagen: ' + e.message); }
 });
+const btnSaveEach = document.querySelector("#btnSaveEach");
+
+async function saveEachFileIndividually() {
+  if (!state.files.length) { alert("Bitte zuerst Dateien auswählen."); return; }
+  for (const file of state.files) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: file.name,
+        types: [{ description: "E-Books", accept: { "application/octet-stream": [".epub",".pdf",".mobi",".azw",".azw3",".kfx",".txt"] } }]
+      });
+      const ws = await handle.createWritable();
+      await ws.write(file);
+      await ws.close();
+    } catch (e) {
+      if (e && e.name !== "AbortError") console.warn("Speichern abgebrochen/fehlerhaft:", e);
+    }
+  }
+  alert("Speichern abgeschlossen.");
+}
+
+btnSaveEach?.addEventListener("click", () => {
+  if (!window.showSaveFilePicker) {
+    alert("Dieser Browser unterstützt das einzelne Speichern nicht. Bitte die Dateien-App verwenden.");
+    return;
+  }
+  saveEachFileIndividually();
+});
 btnConvertToPDF.addEventListener('click', async () => {
   const epub = state.files.find(f => /\\.epub$/i.test(f.name));
   if (!epub){ alert('Bitte zuerst mindestens eine EPUB-Datei auswählen.'); return; }
